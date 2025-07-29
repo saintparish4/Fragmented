@@ -1,4 +1,3 @@
-# InferenceMesh PRD
 ## Decentralized Low-Latency Compute Mesh for On-Chain ML Inference
 
 ### Executive Summary
