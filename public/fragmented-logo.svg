@@ -1,0 +1,50 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Unique Fragmented Logo - Multiple geometric pieces forming a cohesive whole -->
+  
+  <!-- Background circle with subtle gradient -->
+  <defs>
+    <radialGradient id="bgGradient" cx="0.5" cy="0.5" r="0.8">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </radialGradient>
+    <linearGradient id="pieceGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1E40AF"/>
+    </linearGradient>
+    <linearGradient id="pieceGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#6D28D9"/>
+    </linearGradient>
+    <linearGradient id="pieceGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#0891B2"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <circle cx="16" cy="16" r="15" fill="url(#bgGradient)" stroke="#CBD5E1" stroke-width="1"/>
+  
+  <!-- Fragment 1 - Top left triangle -->
+  <path d="M8 8 L16 12 L12 16 L8 8" fill="url(#pieceGradient1)"/>
+  
+  <!-- Fragment 2 - Top right square -->
+  <rect x="16" y="8" width="6" height="6" fill="url(#pieceGradient2)" rx="1"/>
+  
+  <!-- Fragment 3 - Bottom left hexagon -->
+  <path d="M8 18 L12 16 L16 18 L16 22 L12 24 L8 22 Z" fill="url(#pieceGradient3)"/>
+  
+  <!-- Fragment 4 - Bottom right circle -->
+  <circle cx="22" cy="22" r="4" fill="url(#pieceGradient1)"/>
+  
+  <!-- Fragment 5 - Center diamond -->
+  <path d="M14 14 L16 12 L18 14 L16 16 Z" fill="url(#pieceGradient2)"/>
+  
+  <!-- Connection lines between fragments -->
+  <path d="M12 16 L16 12" stroke="#94A3B8" stroke-width="0.5" opacity="0.6"/>
+  <path d="M16 12 L20 16" stroke="#94A3B8" stroke-width="0.5" opacity="0.6"/>
+  <path d="M16 16 L20 20" stroke="#94A3B8" stroke-width="0.5" opacity="0.6"/>
+  <path d="M12 20 L16 16" stroke="#94A3B8" stroke-width="0.5" opacity="0.6"/>
+  
+  <!-- Central dot representing AI/neural connection -->
+  <circle cx="16" cy="16" r="1.5" fill="#1E293B"/>
+</svg> 
