@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Port      string
 	ModelsDir string
+	RedisAddr string
 }
 
 func Load() (*Config, error) {
@@ -22,9 +23,14 @@ func Load() (*Config, error) {
 	if models == "" {
 		models = "./models"
 	}
+	redisAddr := os.Getenv("REDIS_ADDR")
+	if redisAddr == "" {
+		redisAddr = "localhost:6379" // Default Redis address
+	}
 
 	return &Config{
 		Port:      port,
 		ModelsDir: models,
+		RedisAddr: redisAddr,
 	}, nil
 }

@@ -27,6 +27,18 @@ var (
 		},
 		[]string{"model_id"},
 	)
+	CacheHits = prometheus.NewCounter(
+		prometheus.CounterOpts{
+			Name: "infer_cache_hits_total",
+			Help: "Total number of cache hits",
+		},
+	)
+	CacheMisses = prometheus.NewCounter(
+		prometheus.CounterOpts{
+			Name: "infer_cache_misses_total",
+			Help: "Total number of cache misses",
+		},
+	)
 )
 
 func init() {

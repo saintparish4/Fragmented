@@ -1,12 +1,15 @@
 package inference
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"sync"
 	"time"
 
+	"github.com/saintparish4/Fragmented/internal/cache"
 	"github.com/saintparish4/Fragmented/internal/metrics"
 	"github.com/saintparish4/Fragmented/internal/types"
 )
@@ -14,11 +17,13 @@ import (
 type Engine struct {
 	modelsDir string
 	sessions  sync.Map // map[string]bool - tracks loaded models
+	cache     *cache.Cache
 }
 
-func NewEngine(modelsDir string) (*Engine, error) {
+func NewEngine(modelsDir string, cache *cache.Cache) (*Engine, error) {
 	return &Engine{
 		modelsDir: modelsDir,
+		cache:     cache,
 	}, nil
 }
 
@@ -43,6 +48,18 @@ func (e *Engine) Infer(req *types.InferRequest) (*types.InferResponse, int, erro
 		return nil, 400, fmt.Errorf("shape and data are required")
 	}
 
+	// ---------- Cache lookup ----------
+	ctx := context.Background()
+	key, _ := cache.KeyFromRequest(req.Shape, req.Data)
+	if raw, ok := e.cache.Get(ctx, key); ok {
+		metrics.CacheHits.Inc()
+		var cached types.InferResponse
+		_ = json.Unmarshal(raw, &cached)
+		return &cached, 200, nil
+	}
+	metrics.CacheMisses.Inc()
+	// ---------- End cache ----------
+
 	_, err := e.getOrLoad(modelID)
 	if err != nil {
 		metrics.ErrorsTotal.WithLabelValues(modelID, "load_model").Inc()
@@ -61,10 +78,17 @@ func (e *Engine) Infer(req *types.InferRequest) (*types.InferResponse, int, erro
 	metrics.RequestsTotal.WithLabelValues(modelID, "200").Inc()
 	metrics.Latency.WithLabelValues(modelID).Observe(elapsed)
 
-	return &types.InferResponse{
+	resp := &types.InferResponse{
 		ModelID:   modelID,
 		Output:    output,
 		OutPutDim: req.Shape,
 		LatencyMs: elapsed,
-	}, 200, nil
+	}
+
+	// Cache the response
+	if b, _ := json.Marshal(resp); b != nil {
+		_ = e.cache.Set(ctx, key, b)
+	}
+
+	return resp, 200, nil
 }

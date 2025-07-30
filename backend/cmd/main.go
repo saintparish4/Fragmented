@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/saintparish4/Fragmented/internal/cache"
 	"github.com/saintparish4/Fragmented/internal/config"
 	"github.com/saintparish4/Fragmented/internal/inference"
 	"github.com/saintparish4/Fragmented/internal/server"
@@ -16,8 +17,11 @@ func main() {
 		log.Fatalf("failed to load config: %v", err)
 	}
 
+	// Init cache
+	cache := cache.New(cfg.RedisAddr, 3600)
+
 	// Init inference engine (lazy session cache)
-	engine, err := inference.NewEngine(cfg.ModelsDir)
+	engine, err := inference.NewEngine(cfg.ModelsDir, cache)
 	if err != nil {
 		log.Fatalf("engine init error: %v", err)
 	}
